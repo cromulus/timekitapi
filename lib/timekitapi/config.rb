@@ -1,37 +1,45 @@
 module TimekitApi
   class Config
-    @@allowed_keys = [:api_key, :input_timestamp_format, :output_timestamp_format]
+    VALID_OPTIONS_KEYS = [:api_key,
+                          :default_timezone,
+                          :app_name,
+                          :input_timestamp_format,
+                          :output_timestamp_format,
+                          :debug].freeze
 
     class Error < RuntimeError
     end
 
     attr_accessor :data
-    
+
     def initialize
-      self.reset
+      reset
     end
 
     def update(opts)
-      raise Error, 'Invalid TimeKit configuration key' if opts.keys.any?{|k| !@@allowed_keys.include?(k)}
-      self.data.merge! opts
+      fail Error, 'Invalid TimeKit configuration key' if opts.keys.any? { |k| !VALID_OPTIONS_KEYS.include?(k) }
+      data.merge! opts
     end
 
     def [](key)
-      self.data[key]
+      data[key]
     end
 
     def []=(key, val)
-      raise Error, 'Invalid TimeKit configuration key' if !@@allowed_keys.include?(key)
-      self.data[key] = val
+      fail Error, 'Invalid TimeKit configuration key' unless VALID_OPTIONS_KEYS.include?(key)
+      data[key] = val
     end
 
     def has_key?(key)
-      self.data.has_key? key
+      data.key? key
     end
 
     def reset
-      self.data = {}
+      self.data = { debug:                   false,
+                    timezone:                Time.now.zone,
+                    input_timestamp_format:  'Y-m-d h:ia',
+                    output_timestamp_format: 'Y-m-d h:ia'
+                  }
     end
-
   end
 end
