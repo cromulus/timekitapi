@@ -2,6 +2,10 @@
 
 TimekitApi is a client for interacting with Timekit. Duh.
 
+Very much a Work in Progress. It will change, drastically so and probably won't destroy your computer and everything youn hold dear if you try to use it in it's current state, but I can't guarantee it.
+
+Minimally tested. More tests to follow.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,7 +24,28 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Configure it:
+```
+TimekitApi.config(app_name:'your_app_name',timezone:'UTC')
+```
+
+Get yourself a shiny new instance
+```
+client=TimekitApi::Client.new()
+```
+
+Authorize a user:
+```
+client.auth(email,password)
+```
+
+And run with it:
+```
+client.me
+client.set_timezone('EST')
+client.get_accounts
+```
+
 
 ## Development
 
